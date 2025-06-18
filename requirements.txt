@@ -1,5 +1,6 @@
-flask
-pillow
-openpyxl
-gunicorn
-werkzeug
+flask==2.3.3
+pillow==10.4.0
+openpyxl==3.1.5
+gunicorn==22.0.0
+werkzeug==3.0.4
+numpy==1.26.4
