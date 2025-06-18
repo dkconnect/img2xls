@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image to Excel Art</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #fff;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+            width: 90%;
+            text-align: center;
+        }
+        h1 {
+            color: #1a3c34;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        p {
+            color: #2c3e50;
+            font-size: 1.2em;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        label {
+            color: #2c3e50;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .form-control {
+            padding: 12px;
+            border: 2px solid #ff6b6b;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 1em;
+            color: #2c3e50; /* Dark text for visibility */
+            background: #f8f9fa; /* Light background for contrast */
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 8px rgba(78, 205, 196, 0.5);
+        }
+        /* Style file input specifically */
+        input[type="file"] {
+            color: #2c3e50; /* Dark text for file name */
+            background: #f8f9fa; /* Light background */
+        }
+        input[type="file"]::-webkit-file-upload-button {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        input[type="file"]::-webkit-file-upload-button:hover {
+            background: #3aa8a0;
+        }
+        select.form-control {
+            appearance: none;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5"><path d="M0 0l5 5 5-5H0z" fill="%232c3e50"/></svg>') no-repeat right 10px center;
+            background-size: 10px;
+            padding-right: 30px;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+        }
+        .btn {
+            background: linear-gradient(45deg, #1a3c34, #4ecdc4);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 1em;
+        }
+        .alert-success {
+            background: #28a745;
+            color: white;
+        }
+        .alert-danger {
+            background: #dc3545;
+            color: white;
+        }
+        @media (max-width: 500px) {
+            .container {
+                padding: 25px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            .btn {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Image to Excel Art</h1>
+        <p>Create vibrant Excel art from your images with customizable grid sizes!</p>
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="image">Select Image (PNG, JPG, JPEG, BMP)</label>
+                <input type="file" name="image" id="image" accept="image/*" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="grid_size">Grid Size</label>
+                <select name="grid_size" id="grid_size" class="form-control" required>
+                    <option value="25">25x25</option>
+                    <option value="50">50x50</option>
+                    <option value="100" selected>100x100</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Convert to Excel</button>
+        </form>
+        {% if message %}
+            <div class="alert {{ 'alert-danger' if error else 'alert-success' }}">
+                {{ message }}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

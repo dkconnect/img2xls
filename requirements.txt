@@ -1,0 +1,5 @@
+flask
+pillow
+openpyxl
+gunicorn
+werkzeug
