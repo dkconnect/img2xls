@@ -18,7 +18,7 @@
 * [Notes](#notes)
 * [License](#license)
 
-## 📂 Project Overview
+## Project Overview
 
 **Img2Xlsx** is a web app that converts images (PNG, JPG, JPEG, BMP) into Excel spreadsheets. Each pixel becomes a cell colored to match, creating a pixel-art effect.
 
@@ -30,7 +30,7 @@
 
 ---
 
-## 🧠 Logic and Theory
+## Logic and Theory
 
 ### 1. Image Processing with Pillow
 
@@ -81,7 +81,7 @@
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the **MIT License**.
 See the [LICENSE](LICENSE) file for details.
