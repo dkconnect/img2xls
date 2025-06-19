@@ -141,6 +141,12 @@
             box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
         }
 
+        .btn-convert-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
         .btn-convert {
             background-color: var(--button-red);
             color: var(--text-white);
@@ -152,7 +158,6 @@
             cursor: pointer;
             transition: background-color 0.3s, transform 0.2s;
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-            margin-top: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -220,6 +225,16 @@
             margin: 5px 0;
         }
 
+        .footer a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 500px) {
             .container {
                 padding: 25px;
@@ -240,7 +255,7 @@
 <body>
     <div class="container">
         <div class="logo-area">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/1/12/Wikipedia-logo-v2-pixel-art.png" alt="Image to Excel Art Logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/1/12/Wikipedia-logo-v2-pixel-art.png" alt="img2xlsx">
         </div>
         <h1 class="website-name">Image to Excel Art</h1>
         <p class="website-subtitle">Transform your images into vibrant Excel art!</p>
@@ -249,7 +264,7 @@
             <div class="form-group">
                 <label for="image">Choose Image</label>
                 <div class="file-input-wrapper">
-                    <button type="button" class="btn-upload">Choose Image</button>
+                    <button type="button" class="btn-upload">Choose File</button>
                     <input type="file" name="image" id="image" accept="image/png, image/jpeg, image/jpg, image/bmp" required>
                 </div>
                 <div id="file-name" class="file-name"></div>
@@ -266,10 +281,12 @@
                 </select>
             </div>
 
-            <button type="submit" class="btn-convert" id="convert-button">
-                <span>Convert to Excel</span>
-                <div class="spinner"></div>
-            </button>
+            <div class="btn-convert-wrapper">
+                <button type="submit" class="btn-convert" id="convert-button">
+                    <span>Convert to Excel</span>
+                    <div class="spinner"></div>
+                </button>
+            </div>
 
             {% if message %}
                 <div class="alert {{ 'alert-danger' if error else 'alert-success' }}">
@@ -280,7 +297,7 @@
 
         <div class="footer">
             <p>Created by <strong>Lucifer</strong></p>
-            <p><a href="https://github.com/dkconnect" target="_blank" style="color: var(--text-light); text-decoration: none; font-weight: 600;">GitHub</a></p>
+            <p><a href="https://github.com/dkconnect" target="_blank">GitHub</a></p>
             <p>2025</p>
         </div>
     </div>
@@ -296,9 +313,44 @@
                 fileNameDisplay.textContent = imageInput.files.length > 0 ? imageInput.files[0].name : '';
             });
 
-            form.addEventListener('submit', () => {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
                 convertButton.classList.add('loading');
                 convertButton.disabled = true;
+
+                const formData = new FormData(form);
+                fetch('/', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob();
+                    }
+                    throw new Error('Conversion failed');
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    const disposition = response.headers.get('content-disposition') || '';
+                    const filename = disposition.match(/filename="(.+)"/)?.[1] || 'image_art.xlsx';
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+
+                    // Reset button
+                    convertButton.classList.remove('loading');
+                    convertButton.disabled = false;
+                })
+                .catch(error => {
+                    // Reset button on error
+                    convertButton.classList.remove('loading');
+                    convertButton.disabled = false;
+                    fileNameDisplay.textContent = `Error: ${error.message}`;
+                });
             });
         });
     </script>
