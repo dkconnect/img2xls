@@ -11,7 +11,6 @@ UPLOAD_FOLDER = "/tmp/uploads"
 OUTPUT_FOLDER = "/tmp/outputs"
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "bmp"}
 
-# Ensure upload and output folders exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
@@ -19,7 +18,6 @@ def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def get_scaled_dimensions(width, height, max_dimension=100):
-    """Scale dimensions proportionally, capping the larger at max_dimension."""
     if width <= max_dimension and height <= max_dimension:
         return width, height
     ratio = min(max_dimension / width, max_dimension / height)
@@ -27,42 +25,28 @@ def get_scaled_dimensions(width, height, max_dimension=100):
 
 def image_to_excel(input_image_path, output_excel_path, grid_size="free"):
     try:
-        # Load image
         img = Image.open(input_image_path).convert("RGB")
         width, height = img.size
-
-        # Determine grid size
         if grid_size == "free":
-            # Scale dimensions if too large
             target_width, target_height = get_scaled_dimensions(width, height)
             img = img.resize((target_width, target_height), Image.LANCZOS)
         else:
-            # Use fixed square size
             target_width = target_height = int(grid_size)
             img = img.resize((target_width, target_height), Image.LANCZOS)
-
         img_array = np.array(img)
-
-        # Create Excel workbook
         wb = openpyxl.Workbook()
         ws = wb.active
         ws.title = "ImageArt"
-
-        # Set cell dimensions
         for col in range(1, target_width + 1):
             ws.column_dimensions[openpyxl.utils.get_column_letter(col)].width = 2
         for row in range(1, target_height + 1):
             ws.row_dimensions[row].height = 12
-
-        # Map pixels to cells
         for row in range(target_height):
             for col in range(target_width):
                 r, g, b = img_array[row, col]
                 hex_color = f"{r:02X}{g:02X}{b:02X}"
                 cell = ws.cell(row=row + 1, column=col + 1)
                 cell.fill = PatternFill(start_color=hex_color, end_color=hex_color, fill_type="solid")
-
-        # Save Excel file
         wb.save(output_excel_path)
         return True, "Success", target_width, target_height
     except Exception as e:
@@ -95,7 +79,6 @@ def upload_image():
                         input_path = os.path.join(UPLOAD_FOLDER, filename)
                         output_path = os.path.join(OUTPUT_FOLDER, f"{os.path.splitext(filename)[0]}_art.xlsx")
                         file.save(input_path)
-
                         success, result, width, height = image_to_excel(input_path, output_path, grid_size)
                         if success:
                             size_str = f"{width}x{height}" if grid_size == "free" else f"{grid_size}x{grid_size}"
@@ -112,5 +95,4 @@ def upload_image():
                         os.remove(input_path)
                     if "output_path" in locals() and os.path.exists(output_path):
                         os.remove(output_path)
-
     return render_template("index.html", message=message, error=error)
