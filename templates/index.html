@@ -4,127 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image to Excel Art</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark-gray: #f5ed02;
-            --container-light-blue: #ffffff;
-            --header-purple: #8e44ad;
-            --text-dark-gray: #34495e;
-            --text-light-gray: #95a5a6;
+            --bg-yellow: #f5ed02;
+            --container-white: #ffffff;
+            --text-dark: #34495e;
+            --text-light: #95a5a6;
             --button-orange: #e67e22;
             --button-red: #c0392b;
-            --grid-button-blue: #3498db;
-            --grid-button-dark-blue: #2980b9;
-            --image-border-yellow: #f1c40f;
+            --border-yellow: #f1c40f;
+            --select-blue: #3498db;
             --text-white: #ffffff;
-            --active-highlight-color: #2ecc71;
-            --active-text-color: #ffffff;
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg-dark-gray);
+            background-color: var(--bg-yellow);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            color: var(--text-dark-gray);
+            color: var(--text-dark);
             padding: 20px;
             box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
-            background-color: var(--container-light-blue);
+            background-color: var(--container-white);
             padding: 40px;
-            border-radius: 25px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-            max-width: 900px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
             width: 100%;
             text-align: center;
-            position: relative;
-            overflow: hidden;
         }
 
         .logo-area {
             margin-bottom: 20px;
-            min-height: 100px; /* Provides minimum space for a logo */
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .logo-area img {
             max-width: 200px;
             height: auto;
-            display: block;
-            margin: 0 auto;
         }
 
-        .header-subtitle {
-            font-size: 1.8em;
-            color: var(--text-dark-gray);
-            font-weight: 600;
-            margin-top: 10px;
-            margin-bottom: 30px;
-            text-transform: uppercase;
+        .website-name {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
         }
 
-        .content-section {
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .description-text {
-            flex: 1;
-            min-width: 300px;
-            text-align: left;
-        }
-
-        .description-text p {
+        .website-subtitle {
             font-size: 1.2em;
-            color: var(--text-dark-gray);
-            line-height: 1.6;
-        }
-
-        .image-demo {
-            position: relative;
-            border: 5px solid var(--image-border-yellow);
-            border-radius: 15px;
-            padding: 10px;
-            background-color: #fff;
-            display: flex;
-            gap: 5px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            min-width: 280px;
-        }
-
-        .image-demo img {
-            max-width: 150px;
-            height: auto;
-            border-radius: 8px;
-            display: block;
-        }
-
-        .form-section {
-            padding-top: 20px;
+            color: var(--text-light);
+            margin: 10px 0 30px;
         }
 
         .form-group {
             margin-bottom: 25px;
-            text-align: center;
         }
 
         label {
             font-weight: 600;
-            color: var(--text-dark-gray);
+            color: var(--text-dark);
             margin-bottom: 10px;
             display: block;
             font-size: 1.1em;
@@ -133,20 +78,19 @@
         .file-input-wrapper {
             position: relative;
             display: inline-block;
-            width: auto;
         }
 
         .btn-upload {
             background-color: var(--button-orange);
             color: var(--text-white);
-            padding: 15px 40px;
+            padding: 12px 30px;
             border: none;
-            border-radius: 30px;
-            font-size: 1.4em;
-            font-weight: 700;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
         }
 
         .btn-upload:hover {
@@ -164,190 +108,98 @@
             cursor: pointer;
         }
 
-        .file-name-display {
-            margin-top: 15px;
+        .file-name {
+            margin-top: 10px;
             font-size: 1em;
-            color: var(--text-dark-gray);
+            color: var(--text-dark);
             font-weight: 600;
-            height: 1.2em;
-            min-height: 1.2em;
-            display: block;
         }
 
         .file-formats {
-            margin-top: 5px;
             font-size: 0.9em;
-            color: var(--text-light-gray);
+            color: var(--text-light);
+            margin-top: 5px;
         }
 
-        .grid-size-options {
-            margin-top: 30px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
+        select {
+            padding: 12px;
+            border: 2px solid var(--border-yellow);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 300px;
+            font-size: 1em;
+            color: var(--text-dark);
+            background-color: #f8f9fa;
+            appearance: none;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5"><path d="M0 0l5 5 5-5H0z" fill="%2334495e"/></svg>') no-repeat right 10px center;
+            background-size: 10px;
         }
 
-        .grid-size-label {
-            font-size: 1.3em;
-            color: var(--text-dark-gray);
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        .grid-button {
-            background-color: var(--grid-button-blue);
-            color: var(--text-white);
-            padding: 15px 25px;
-            border: none;
-            border-radius: 15px;
-            font-size: 1.2em;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            line-height: 1.2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-width: 80px;
-        }
-
-        .grid-button:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
-        }
-
-        .grid-button.active {
-            background-color: var(--active-highlight-color);
-            color: var(--active-text-color);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 0 3px var(--active-highlight-color);
-            transform: translateY(-1px);
-        }
-
-        .grid-button.free-size {
-            background-color: var(--grid-button-dark-blue);
-        }
-
-        .grid-button.free-size:hover {
-            background-color: #21618c;
-        }
-
-        .grid-button span:first-child {
-            font-size: 1.1em;
-        }
-        .grid-button span:last-child {
-            font-size: 0.8em;
-            line-height: 1;
-        }
-
-
-        .btn-convert-wrapper {
-            position: relative;
-            display: inline-block;
-            margin-top: 50px;
+        select:focus {
+            outline: none;
+            border-color: var(--select-blue);
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
         }
 
         .btn-convert {
             background-color: var(--button-red);
             color: var(--text-white);
-            padding: 20px 60px;
+            padding: 15px 40px;
             border: none;
-            border-radius: 30px;
-            font-size: 1.8em;
-            font-weight: 700;
+            border-radius: 25px;
+            font-size: 1.4em;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
         }
 
-        .btn-convert:hover:not(:disabled) {
+        .btn-convert:hover {
             background-color: #a93226;
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
 
-        .btn-convert:disabled {
-            background-color: #a93226;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 1em;
         }
 
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid var(--text-white);
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-            display: none;
+        .alert-success {
+            background: #28a745;
+            color: var(--text-white);
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .alert-danger {
+            background: #dc3545;
+            color: var(--text-white);
         }
 
         .footer {
-            margin-top: 50px;
+            margin-top: 40px;
             font-size: 0.9em;
-            color: var(--text-light-gray);
-            text-align: center;
+            color: var(--text-light);
         }
 
-        @media (max-width: 768px) {
+        .footer p {
+            margin: 5px 0;
+        }
+
+        @media (max-width: 500px) {
             .container {
-                padding: 30px;
+                padding: 25px;
             }
-            .header-subtitle {
-                font-size: 1.4em;
+            .website-name {
+                font-size: 2em;
             }
-            .content-section {
-                flex-direction: column;
-                text-align: center;
-            }
-            .description-text {
-                min-width: unset;
-                text-align: center;
-            }
-            .image-demo {
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-            .image-demo img {
-                max-width: 120px;
-            }
-            .btn-upload, .btn-convert {
-                font-size: 1.2em;
-                padding: 12px 30px;
-            }
-            .grid-button {
-                padding: 10px 20px;
+            .website-subtitle {
                 font-size: 1em;
             }
-            .btn-convert .spinner {
-                width: 20px;
-                height: 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 20px;
-            }
-            .header-subtitle {
+            .btn-upload, .btn-convert {
+                padding: 12px 25px;
                 font-size: 1.2em;
-            }
-            .image-demo img {
-                max-width: 100px;
-            }
-            .grid-button {
-                min-width: 60px;
             }
         }
     </style>
@@ -355,95 +207,54 @@
 <body>
     <div class="container">
         <div class="logo-area">
-            <img src="https://upload.wikimedia.org/wikipedia/en/8/80/Wikipedia-logo-v2.svg" alt="img2xlsx">
+            <img src="https://via.placeholder.com/200x100?text=Your+Logo" alt="Image to Excel Art Logo">
         </div>
-        <h2 class="header-subtitle">Image to Excel Art</h2>
+        <h1 class="website-name">Image to Excel Art</h1>
+        <p class="website-subtitle">Transform your images into vibrant Excel art!</p>
 
-        <div class="content-section">
-            <div class="description-text">
-                <p>Create vibrant Excel art from your images with customizable grid sizes!</p>
-            </div>
-            <div class="image-demo">
-                <img src="images/xlsx-converted.png" alt="Original Image">
-                <img src="images/xlsx-converted.png" alt="Excel Art Representation">
-            </div>
-        </div>
-
-        <form method="post" enctype="multipart/form-data" class="form-section" id="conversionForm">
+        <form method="post" enctype="multipart/form-data">
             <div class="form-group">
+                <label for="image">Choose Image</label>
                 <div class="file-input-wrapper">
-                    <button type="button" class="btn-upload">CHOOSE IMAGE</button>
-                    <input type="file" name="image" id="imageInput" accept="image/png, image/jpeg, image/jpg, image/bmp" required>
+                    <button type="button" class="btn-upload">Choose Image</button>
+                    <input type="file" name="image" id="image" accept="image/png, image/jpeg, image/jpg, image/bmp" required>
                 </div>
-                <div id="fileNameDisplay" class="file-name-display"></div>
+                <div id="file-name" class="file-name"></div>
                 <div class="file-formats">(PNG, JPG, JPEG, BMP)</div>
             </div>
 
             <div class="form-group">
-                <div class="grid-size-label">CHOOSE GRID SIZE</div>
-                <div class="grid-size-options">
-                    <button type="button" class="grid-button active" data-grid-value="100"><span>100</span><span>X</span><span>100</span></button>
-                    <button type="button" class="grid-button" data-grid-value="50"><span>50</span><span>X</span><span>50</span></button>
-                    <button type="button" class="grid-button" data-grid-value="25"><span>25</span><span>X</span><span>25</span></button>
-                    <button type="button" class="grid-button free-size" data-grid-value="free"><span>FREE</span><span>SIZE</span></button>
-                </div>
-                <input type="hidden" name="grid_size" id="grid_size_hidden_input" value="100">
+                <label for="grid_size">Grid Size</label>
+                <select name="grid_size" id="grid_size" required>
+                    <option value="25">25x25</option>
+                    <option value="50">50x50</option>
+                    <option value="100" selected>100x100</option>
+                    <option value="free">Free Size (Original Size)</option>
+                </select>
             </div>
 
-            <div class="btn-convert-wrapper">
-                <button type="submit" class="btn-convert" id="convertButton">
-                    CONVERT
-                    <div class="spinner" id="loadingSpinner"></div>
-                </button>
-            </div>
+            <button type="submit" class="btn-convert">Convert to Excel</button>
+
+            {% if message %}
+                <div class="alert {{ 'alert-danger' if error else 'alert-success' }}">
+                    {{ message }}
+                </div>
+            {% endif %}
         </form>
 
         <div class="footer">
-            <p>CREATED BY LUCIFER</p>
+            <p>Created by Lucifer</p>
             <p>2025</p>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const imageInput = document.getElementById('imageInput');
-            const fileNameDisplay = document.getElementById('fileNameDisplay');
-            const gridButtons = document.querySelectorAll('.grid-button');
-            const hiddenGridInput = document.getElementById('grid_size_hidden_input');
-            const conversionForm = document.getElementById('conversionForm');
-            const convertButton = document.getElementById('convertButton');
-            const loadingSpinner = document.getElementById('loadingSpinner');
+            const imageInput = document.getElementById('image');
+            const fileNameDisplay = document.getElementById('file-name');
 
             imageInput.addEventListener('change', () => {
-                if (imageInput.files.length > 0) {
-                    fileNameDisplay.textContent = imageInput.files[0].name;
-                } else {
-                    fileNameDisplay.textContent = '';
-                }
-            });
-
-            gridButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    gridButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    hiddenGridInput.value = button.dataset.gridValue;
-                });
-            });
-
-            conversionForm.addEventListener('submit', (event) => {
-                event.preventDefault(); 
-
-                convertButton.disabled = true;
-                loadingSpinner.style.display = 'block';
-                convertButton.childNodes[0].nodeValue = ''; 
-                
-                setTimeout(() => {
-                    alert('Conversion would start now! (Simulated)');
-                    
-                    convertButton.disabled = false;
-                    loadingSpinner.style.display = 'none';
-                    convertButton.childNodes[0].nodeValue = 'CONVERT';
-                }, 2000);
+                fileNameDisplay.textContent = imageInput.files.length > 0 ? imageInput.files[0].name : '';
             });
         });
     </script>
