@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image to Excel Art</title>
+    <title>Img2Xlsx</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -255,7 +255,7 @@
 <body>
     <div class="container">
         <div class="logo-area">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/1/12/Wikipedia-logo-v2-pixel-art.png" alt="img2xlsx">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/1/12/Wikipedia-logo-v2-pixel-art.png" alt="Image to Excel Art Logo">
         </div>
         <h1 class="website-name">Image to Excel Art</h1>
         <p class="website-subtitle">Transform your images into vibrant Excel art!</p>
@@ -308,6 +308,7 @@
             const convertButton = document.getElementById('convert-button');
             const imageInput = document.getElementById('image');
             const fileNameDisplay = document.getElementById('file-name');
+            const gridSizeSelect = document.getElementById('grid_size');
 
             imageInput.addEventListener('change', () => {
                 fileNameDisplay.textContent = imageInput.files.length > 0 ? imageInput.files[0].name : '';
@@ -317,6 +318,7 @@
                 e.preventDefault();
                 convertButton.classList.add('loading');
                 convertButton.disabled = true;
+                fileNameDisplay.textContent = ''; // Clear previous messages
 
                 const formData = new FormData(form);
                 fetch('/', {
@@ -324,17 +326,16 @@
                     body: formData
                 })
                 .then(response => {
-                    if (response.ok) {
-                        return response.blob();
+                    if (!response.ok) {
+                        throw new Error('Conversion failed: ' + response.statusText);
                     }
-                    throw new Error('Conversion failed');
+                    return response.blob().then(blob => ({ blob, gridSize: formData.get('grid_size') }));
                 })
-                .then(blob => {
+                .then(({ blob, gridSize }) => {
                     const url = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    const disposition = response.headers.get('content-disposition') || '';
-                    const filename = disposition.match(/filename="(.+)"/)?.[1] || 'image_art.xlsx';
+                    const filename = gridSize === 'free' ? 'image_art_free.xlsx' : `image_art_${gridSize}x${gridSize}.xlsx`;
                     a.download = filename;
                     document.body.appendChild(a);
                     a.click();
@@ -346,7 +347,6 @@
                     convertButton.disabled = false;
                 })
                 .catch(error => {
-                    // Reset button on error
                     convertButton.classList.remove('loading');
                     convertButton.disabled = false;
                     fileNameDisplay.textContent = `Error: ${error.message}`;
