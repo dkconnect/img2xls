@@ -3,154 +3,387 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image to Excel Art</title>
+    <title>img2xlsx - Image to Excel Art</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-dark-gray: #1a1a1a;
+            --container-light-blue: #eceff1; /* Light grayish blue */
+            --header-purple: #8e44ad; /* Adjust based on image perception */
+            --text-dark-gray: #34495e; /* Darker gray for some text */
+            --text-light-gray: #95a5a6; /* Lighter gray for some text */
+            --button-orange: #e67e22;
+            --button-red: #c0392b;
+            --grid-button-blue: #3498db;
+            --grid-button-dark-blue: #2980b9;
+            --image-border-yellow: #f1c40f;
+            --text-white: #ffffff;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark-gray);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            color: #fff;
+            color: var(--text-dark-gray);
+            padding: 20px;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
+
         .container {
-            background: rgba(255, 255, 255, 0.95);
+            background-color: var(--container-light-blue);
             padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            max-width: 700px;
-            width: 90%;
+            border-radius: 25px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            max-width: 900px;
+            width: 100%;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        h1 {
-            color: #1a3c34;
-            font-size: 2.8em;
-            margin-bottom: 15px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+
+        .header-title {
+            font-family: 'Playfair Display', serif; /* For the stylized look */
+            font-size: 5em;
+            color: var(--header-purple);
+            margin-bottom: 5px;
+            letter-spacing: -2px;
+            line-height: 1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-weight: 700;
         }
-        p {
-            color: #2c3e50;
-            font-size: 1.2em;
-            margin-bottom: 25px;
+
+        .header-subtitle {
+            font-size: 1.8em;
+            color: var(--text-dark-gray);
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 30px;
+            text-transform: uppercase;
         }
-        .form-group {
-            margin-bottom: 20px;
+
+        .content-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-wrap: wrap; /* Allows wrapping on smaller screens */
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .description-text {
+            flex: 1;
+            min-width: 300px; /* Ensure text block has enough space */
             text-align: left;
         }
-        label {
-            color: #2c3e50;
-            font-weight: bold;
-            margin-bottom: 8px;
+
+        .description-text p {
+            font-size: 1.2em;
+            color: var(--text-dark-gray);
+            line-height: 1.6;
+        }
+
+        .image-demo {
+            position: relative;
+            border: 5px solid var(--image-border-yellow);
+            border-radius: 15px;
+            padding: 10px;
+            background-color: #fff; /* Inner background for images */
+            display: flex;
+            gap: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            min-width: 280px; /* Prevent shrinking too much */
+        }
+
+        .image-demo img {
+            max-width: 150px; /* Adjust image sizes */
+            height: auto;
+            border-radius: 8px;
             display: block;
         }
-        .form-control {
-            padding: 12px;
-            border: 2px solid #ff6b6b;
-            border-radius: 8px;
-            width: 100%;
-            box-sizing: border-box;
-            font-size: 1em;
-            color: #2c3e50; /* Dark text for visibility */
-            background: #f8f9fa; /* Light background for contrast */
+
+        .form-section {
+            padding-top: 20px;
         }
-        .form-control:focus {
-            outline: none;
-            border-color: #4ecdc4;
-            box-shadow: 0 0 8px rgba(78, 205, 196, 0.5);
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: center;
         }
-        /* Style file input specifically */
+
+        label {
+            font-weight: 600;
+            color: var(--text-dark-gray);
+            margin-bottom: 10px;
+            display: block;
+            font-size: 1.1em;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block; /* Aligns with how it looks in the image */
+            width: auto; /* Adjust as needed */
+        }
+
+        .btn-upload {
+            background-color: var(--button-orange);
+            color: var(--text-white);
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.4em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-upload:hover {
+            background-color: #d35400;
+            transform: translateY(-2px);
+        }
+
         input[type="file"] {
-            color: #2c3e50; /* Dark text for file name */
-            background: #f8f9fa; /* Light background */
-        }
-        input[type="file"]::-webkit-file-upload-button {
-            background: #4ecdc4;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
             cursor: pointer;
-            transition: background 0.2s;
         }
-        input[type="file"]::-webkit-file-upload-button:hover {
-            background: #3aa8a0;
+
+        .file-formats {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: var(--text-light-gray);
         }
-        select.form-control {
-            appearance: none;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5"><path d="M0 0l5 5 5-5H0z" fill="%232c3e50"/></svg>') no-repeat right 10px center;
-            background-size: 10px;
-            padding-right: 30px;
-            color: #2c3e50;
-            background-color: #f8f9fa;
+
+        .grid-size-options {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
         }
-        .btn {
-            background: linear-gradient(45deg, #1a3c34, #4ecdc4);
-            color: white;
-            padding: 15px 30px;
+
+        .grid-size-label {
+            font-size: 1.3em;
+            color: var(--text-dark-gray);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .grid-button {
+            background-color: var(--grid-button-blue);
+            color: var(--text-white);
+            padding: 15px 25px;
             border: none;
-            border-radius: 10px;
+            border-radius: 15px;
             font-size: 1.2em;
+            font-weight: 700;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            line-height: 1.2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 80px; /* Ensure buttons are wide enough */
         }
-        .btn:hover {
+
+        .grid-button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .grid-button.free-size {
+            background-color: var(--grid-button-dark-blue);
+        }
+
+        .grid-button.free-size:hover {
+            background-color: #21618c;
+        }
+
+        .grid-button span:first-child {
+            font-size: 1.1em;
+        }
+        .grid-button span:last-child {
+            font-size: 0.8em;
+            line-height: 1;
+        }
+
+
+        .btn-convert {
+            background-color: var(--button-red);
+            color: var(--text-white);
+            padding: 20px 60px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.8em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            margin-top: 50px; /* Space from above elements */
+        }
+
+        .btn-convert:hover {
+            background-color: #a93226;
             transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
-        .alert {
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 20px;
-            font-size: 1em;
+
+        .footer {
+            margin-top: 50px;
+            font-size: 0.9em;
+            color: var(--text-light-gray);
+            text-align: center;
         }
-        .alert-success {
-            background: #28a745;
-            color: white;
-        }
-        .alert-danger {
-            background: #dc3545;
-            color: white;
-        }
-        @media (max-width: 500px) {
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
             .container {
-                padding: 25px;
+                padding: 30px;
             }
-            h1 {
-                font-size: 2em;
+            .header-title {
+                font-size: 3.5em;
             }
-            .btn {
-                padding: 12px 20px;
+            .header-subtitle {
+                font-size: 1.4em;
+            }
+            .content-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            .description-text {
+                min-width: unset;
+                text-align: center;
+            }
+            .image-demo {
+                justify-content: center;
+                flex-wrap: wrap; /* Allow images to wrap if they are too wide */
+            }
+            .image-demo img {
+                max-width: 120px;
+            }
+            .btn-upload, .btn-convert {
+                font-size: 1.2em;
+                padding: 12px 30px;
+            }
+            .grid-button {
+                padding: 10px 20px;
                 font-size: 1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+            .header-title {
+                font-size: 2.8em;
+            }
+            .header-subtitle {
+                font-size: 1.2em;
+            }
+            .image-demo img {
+                max-width: 100px;
+            }
+            .grid-button {
+                min-width: 60px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Image to Excel Art</h1>
-        <p>Create vibrant Excel art from your images with customizable grid sizes!</p>
-        <form method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="image">Select Image (PNG, JPG, JPEG, BMP)</label>
-                <input type="file" name="image" id="image" accept="image/*" class="form-control" required>
+        <h1 class="header-title">img2xlsx</h1>
+        <h2 class="header-subtitle">Image to Excel Art</h2>
+
+        <div class="content-section">
+            <div class="description-text">
+                <p>Create vibrant Excel art from your images with customizable grid sizes!</p>
             </div>
-            <div class="form-group">
-                <label for="grid_size">Grid Size</label>
-                <select name="grid_size" id="grid_size" class="form-control" required>
-                    <option value="25">25x25</option>
-                    <option value="50">50x50</option>
-                    <option value="100" selected>100x100</option>
-                </select>
+            <div class="image-demo">
+                <img src="https://via.placeholder.com/150x200/cccccc/000000?text=Original" alt="Original Image">
+                <img src="https://via.placeholder.com/150x200/999999/ffffff?text=Excel+Art" alt="Excel Art Representation">
             </div>
-            <button type="submit" class="btn">Convert to Excel</button>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" class="form-section">
+            <div class="form-group">
+                <div class="file-input-wrapper">
+                    <button type="button" class="btn-upload">CHOOSE IMAGE</button>
+                    <input type="file" name="image" id="image" accept="image/png, image/jpeg, image/jpg, image/bmp" required>
+                </div>
+                <div class="file-formats">(PNG, JPG, JPEG, BMP)</div>
+            </div>
+
+            <div class="form-group">
+                <div class="grid-size-label">CHOOSE GRID SIZE</div>
+                <div class="grid-size-options">
+                    <button type="button" class="grid-button"><span>100</span><span>X</span><span>100</span></button>
+                    <button type="button" class="grid-button"><span>50</span><span>X</span><span>50</span></button>
+                    <button type="button" class="grid-button"><span>25</span><span>X</span><span>25</span></button>
+                    <button type="button" class="grid-button free-size"><span>FREE</span><span>SIZE</span></button>
+                </div>
+                <input type="hidden" name="grid_size" id="grid_size_hidden_input" value="100">
+            </div>
+
+            <button type="submit" class="btn-convert">CONVERT</button>
         </form>
-        {% if message %}
-            <div class="alert {{ 'alert-danger' if error else 'alert-success' }}">
-                {{ message }}
-            </div>
-        {% endif %}
+
+        <div class="footer">
+            <p>CREATED BY LUCIFER</p>
+            <p>2025</p>
+        </div>
     </div>
+
+    <script>
+        // JavaScript to handle grid size selection and update hidden input
+        document.addEventListener('DOMContentLoaded', () => {
+            const gridButtons = document.querySelectorAll('.grid-button');
+            const hiddenInput = document.getElementById('grid_size_hidden_input');
+
+            // Set initial active state and hidden input value (e.g., 100x100)
+            let currentActiveButton = document.querySelector('.grid-button:first-child');
+            if (currentActiveButton) {
+                currentActiveButton.classList.add('active');
+                hiddenInput.value = '100'; // Default value
+            }
+
+
+            gridButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from previously active button
+                    if (currentActiveButton) {
+                        currentActiveButton.classList.remove('active');
+                    }
+
+                    // Add active class to clicked button
+                    button.classList.add('active');
+                    currentActiveButton = button;
+
+                    // Update the hidden input value based on the button text
+                    const buttonText = button.textContent.trim().toLowerCase();
+                    if (buttonText.includes('100x100')) {
+                        hiddenInput.value = '100';
+                    } else if (buttonText.includes('50x50')) {
+                        hiddenInput.value = '50';
+                    } else if (buttonText.includes('25x25')) {
+                        hiddenInput.value = '25';
+                    } else if (buttonText.includes('freesize')) {
+                        hiddenInput.value = 'free'; // Or prompt for custom input
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
