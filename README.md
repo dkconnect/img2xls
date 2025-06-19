@@ -77,7 +77,7 @@
 
 ## Note
 
-### I have used Code Sandbox for the initial development before transferring it to github so the previous commits are not visible here.
+**I have used Code Sandbox for the initial development before transferring it to github so the previous commits are not visible here.**
 
 ---
 
