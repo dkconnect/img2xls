@@ -3,21 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>img2xlsx - Image to Excel Art</title>
+    <title>Image to Excel Art</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark-gray: #1a1a1a;
-            --container-light-blue: #eceff1; /* Light grayish blue */
-            --header-purple: #8e44ad; /* Adjust based on image perception */
-            --text-dark-gray: #34495e; /* Darker gray for some text */
-            --text-light-gray: #95a5a6; /* Lighter gray for some text */
+            --container-light-blue: #eceff1;
+            --header-purple: #8e44ad;
+            --text-dark-gray: #34495e;
+            --text-light-gray: #95a5a6;
             --button-orange: #e67e22;
             --button-red: #c0392b;
             --grid-button-blue: #3498db;
             --grid-button-dark-blue: #2980b9;
             --image-border-yellow: #f1c40f;
             --text-white: #ffffff;
+            --active-highlight-color: #2ecc71;
+            --active-text-color: #ffffff;
         }
 
         body {
@@ -47,22 +49,26 @@
             overflow: hidden;
         }
 
-        .header-title {
-            font-family: 'Playfair Display', serif; /* For the stylized look */
-            font-size: 5em;
-            color: var(--header-purple);
-            margin-bottom: 5px;
-            letter-spacing: -2px;
-            line-height: 1;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            font-weight: 700;
+        .logo-area {
+            margin-bottom: 20px;
+            min-height: 100px; /* Provides minimum space for a logo */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-area img {
+            max-width: 200px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
         }
 
         .header-subtitle {
             font-size: 1.8em;
             color: var(--text-dark-gray);
             font-weight: 600;
-            margin-top: 0;
+            margin-top: 10px;
             margin-bottom: 30px;
             text-transform: uppercase;
         }
@@ -71,14 +77,14 @@
             display: flex;
             align-items: center;
             justify-content: space-around;
-            flex-wrap: wrap; /* Allows wrapping on smaller screens */
+            flex-wrap: wrap;
             gap: 30px;
             margin-bottom: 40px;
         }
 
         .description-text {
             flex: 1;
-            min-width: 300px; /* Ensure text block has enough space */
+            min-width: 300px;
             text-align: left;
         }
 
@@ -93,15 +99,15 @@
             border: 5px solid var(--image-border-yellow);
             border-radius: 15px;
             padding: 10px;
-            background-color: #fff; /* Inner background for images */
+            background-color: #fff;
             display: flex;
             gap: 5px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            min-width: 280px; /* Prevent shrinking too much */
+            min-width: 280px;
         }
 
         .image-demo img {
-            max-width: 150px; /* Adjust image sizes */
+            max-width: 150px;
             height: auto;
             border-radius: 8px;
             display: block;
@@ -126,8 +132,8 @@
 
         .file-input-wrapper {
             position: relative;
-            display: inline-block; /* Aligns with how it looks in the image */
-            width: auto; /* Adjust as needed */
+            display: inline-block;
+            width: auto;
         }
 
         .btn-upload {
@@ -158,8 +164,18 @@
             cursor: pointer;
         }
 
+        .file-name-display {
+            margin-top: 15px;
+            font-size: 1em;
+            color: var(--text-dark-gray);
+            font-weight: 600;
+            height: 1.2em;
+            min-height: 1.2em;
+            display: block;
+        }
+
         .file-formats {
-            margin-top: 10px;
+            margin-top: 5px;
             font-size: 0.9em;
             color: var(--text-light-gray);
         }
@@ -188,19 +204,26 @@
             font-size: 1.2em;
             font-weight: 700;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             line-height: 1.2;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-width: 80px; /* Ensure buttons are wide enough */
+            min-width: 80px;
         }
 
         .grid-button:hover {
             background-color: #2980b9;
             transform: translateY(-2px);
+        }
+
+        .grid-button.active {
+            background-color: var(--active-highlight-color);
+            color: var(--active-text-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 0 3px var(--active-highlight-color);
+            transform: translateY(-1px);
         }
 
         .grid-button.free-size {
@@ -220,6 +243,12 @@
         }
 
 
+        .btn-convert-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-top: 50px;
+        }
+
         .btn-convert {
             background-color: var(--button-red);
             color: var(--text-white);
@@ -231,12 +260,37 @@
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            margin-top: 50px; /* Space from above elements */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
 
-        .btn-convert:hover {
+        .btn-convert:hover:not(:disabled) {
             background-color: #a93226;
             transform: translateY(-3px);
+        }
+
+        .btn-convert:disabled {
+            background-color: #a93226;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid var(--text-white);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .footer {
@@ -246,13 +300,9 @@
             text-align: center;
         }
 
-        /* Responsive Adjustments */
         @media (max-width: 768px) {
             .container {
                 padding: 30px;
-            }
-            .header-title {
-                font-size: 3.5em;
             }
             .header-subtitle {
                 font-size: 1.4em;
@@ -267,7 +317,7 @@
             }
             .image-demo {
                 justify-content: center;
-                flex-wrap: wrap; /* Allow images to wrap if they are too wide */
+                flex-wrap: wrap;
             }
             .image-demo img {
                 max-width: 120px;
@@ -280,14 +330,15 @@
                 padding: 10px 20px;
                 font-size: 1em;
             }
+            .btn-convert .spinner {
+                width: 20px;
+                height: 20px;
+            }
         }
 
         @media (max-width: 480px) {
             .container {
                 padding: 20px;
-            }
-            .header-title {
-                font-size: 2.8em;
             }
             .header-subtitle {
                 font-size: 1.2em;
@@ -303,7 +354,8 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="header-title">img2xlsx</h1>
+        <div class="logo-area">
+            </div>
         <h2 class="header-subtitle">Image to Excel Art</h2>
 
         <div class="content-section">
@@ -316,27 +368,33 @@
             </div>
         </div>
 
-        <form method="post" enctype="multipart/form-data" class="form-section">
+        <form method="post" enctype="multipart/form-data" class="form-section" id="conversionForm">
             <div class="form-group">
                 <div class="file-input-wrapper">
                     <button type="button" class="btn-upload">CHOOSE IMAGE</button>
-                    <input type="file" name="image" id="image" accept="image/png, image/jpeg, image/jpg, image/bmp" required>
+                    <input type="file" name="image" id="imageInput" accept="image/png, image/jpeg, image/jpg, image/bmp" required>
                 </div>
+                <div id="fileNameDisplay" class="file-name-display"></div>
                 <div class="file-formats">(PNG, JPG, JPEG, BMP)</div>
             </div>
 
             <div class="form-group">
                 <div class="grid-size-label">CHOOSE GRID SIZE</div>
                 <div class="grid-size-options">
-                    <button type="button" class="grid-button"><span>100</span><span>X</span><span>100</span></button>
-                    <button type="button" class="grid-button"><span>50</span><span>X</span><span>50</span></button>
-                    <button type="button" class="grid-button"><span>25</span><span>X</span><span>25</span></button>
-                    <button type="button" class="grid-button free-size"><span>FREE</span><span>SIZE</span></button>
+                    <button type="button" class="grid-button active" data-grid-value="100"><span>100</span><span>X</span><span>100</span></button>
+                    <button type="button" class="grid-button" data-grid-value="50"><span>50</span><span>X</span><span>50</span></button>
+                    <button type="button" class="grid-button" data-grid-value="25"><span>25</span><span>X</span><span>25</span></button>
+                    <button type="button" class="grid-button free-size" data-grid-value="free"><span>FREE</span><span>SIZE</span></button>
                 </div>
                 <input type="hidden" name="grid_size" id="grid_size_hidden_input" value="100">
             </div>
 
-            <button type="submit" class="btn-convert">CONVERT</button>
+            <div class="btn-convert-wrapper">
+                <button type="submit" class="btn-convert" id="convertButton">
+                    CONVERT
+                    <div class="spinner" id="loadingSpinner"></div>
+                </button>
+            </div>
         </form>
 
         <div class="footer">
@@ -346,42 +404,45 @@
     </div>
 
     <script>
-        // JavaScript to handle grid size selection and update hidden input
         document.addEventListener('DOMContentLoaded', () => {
+            const imageInput = document.getElementById('imageInput');
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
             const gridButtons = document.querySelectorAll('.grid-button');
-            const hiddenInput = document.getElementById('grid_size_hidden_input');
+            const hiddenGridInput = document.getElementById('grid_size_hidden_input');
+            const conversionForm = document.getElementById('conversionForm');
+            const convertButton = document.getElementById('convertButton');
+            const loadingSpinner = document.getElementById('loadingSpinner');
 
-            // Set initial active state and hidden input value (e.g., 100x100)
-            let currentActiveButton = document.querySelector('.grid-button:first-child');
-            if (currentActiveButton) {
-                currentActiveButton.classList.add('active');
-                hiddenInput.value = '100'; // Default value
-            }
-
+            imageInput.addEventListener('change', () => {
+                if (imageInput.files.length > 0) {
+                    fileNameDisplay.textContent = imageInput.files[0].name;
+                } else {
+                    fileNameDisplay.textContent = '';
+                }
+            });
 
             gridButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    // Remove active class from previously active button
-                    if (currentActiveButton) {
-                        currentActiveButton.classList.remove('active');
-                    }
-
-                    // Add active class to clicked button
+                    gridButtons.forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
-                    currentActiveButton = button;
-
-                    // Update the hidden input value based on the button text
-                    const buttonText = button.textContent.trim().toLowerCase();
-                    if (buttonText.includes('100x100')) {
-                        hiddenInput.value = '100';
-                    } else if (buttonText.includes('50x50')) {
-                        hiddenInput.value = '50';
-                    } else if (buttonText.includes('25x25')) {
-                        hiddenInput.value = '25';
-                    } else if (buttonText.includes('freesize')) {
-                        hiddenInput.value = 'free'; // Or prompt for custom input
-                    }
+                    hiddenGridInput.value = button.dataset.gridValue;
                 });
+            });
+
+            conversionForm.addEventListener('submit', (event) => {
+                event.preventDefault(); 
+
+                convertButton.disabled = true;
+                loadingSpinner.style.display = 'block';
+                convertButton.childNodes[0].nodeValue = ''; 
+                
+                setTimeout(() => {
+                    alert('Conversion would start now! (Simulated)');
+                    
+                    convertButton.disabled = false;
+                    loadingSpinner.style.display = 'none';
+                    convertButton.childNodes[0].nodeValue = 'CONVERT';
+                }, 2000);
             });
         });
     </script>
