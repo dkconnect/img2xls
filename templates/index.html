@@ -153,11 +153,44 @@
             transition: background-color 0.3s, transform 0.2s;
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
             margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
         }
 
-        .btn-convert:hover {
+        .btn-convert:hover:not(:disabled) {
             background-color: #a93226;
             transform: translateY(-2px);
+        }
+
+        .btn-convert:disabled {
+            background-color: #a93226;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            display: none;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid var(--text-white);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .btn-convert.loading .spinner {
+            display: inline-block;
+        }
+
+        .btn-convert.loading span {
+            display: none;
         }
 
         .alert {
@@ -207,12 +240,12 @@
 <body>
     <div class="container">
         <div class="logo-area">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/1/12/Wikipedia-logo-v2-pixel-art.png" alt="img2xlsx">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/1/12/Wikipedia-logo-v2-pixel-art.png" alt="Image to Excel Art Logo">
         </div>
         <h1 class="website-name">Image to Excel Art</h1>
         <p class="website-subtitle">Transform your images into vibrant Excel art!</p>
 
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" id="conversion-form">
             <div class="form-group">
                 <label for="image">Choose Image</label>
                 <div class="file-input-wrapper">
@@ -229,11 +262,14 @@
                     <option value="25">25x25</option>
                     <option value="50">50x50</option>
                     <option value="100" selected>100x100</option>
-                    <option value="free">Free Size (Original Size)</option>
+                    <option value="free">Free Size (Original)</option>
                 </select>
             </div>
 
-            <button type="submit" class="btn-convert">Convert to Excel</button>
+            <button type="submit" class="btn-convert" id="convert-button">
+                <span>Convert to Excel</span>
+                <div class="spinner"></div>
+            </button>
 
             {% if message %}
                 <div class="alert {{ 'alert-danger' if error else 'alert-success' }}">
@@ -243,18 +279,26 @@
         </form>
 
         <div class="footer">
-            <p>Created by Lucifer</p>
+            <p>Created by <strong>Lucifer</strong></p>
+            <p><a href="https://github.com/dkconnect" target="_blank" style="color: var(--text-light); text-decoration: none; font-weight: 600;">GitHub</a></p>
             <p>2025</p>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('conversion-form');
+            const convertButton = document.getElementById('convert-button');
             const imageInput = document.getElementById('image');
             const fileNameDisplay = document.getElementById('file-name');
 
             imageInput.addEventListener('change', () => {
                 fileNameDisplay.textContent = imageInput.files.length > 0 ? imageInput.files[0].name : '';
+            });
+
+            form.addEventListener('submit', () => {
+                convertButton.classList.add('loading');
+                convertButton.disabled = true;
             });
         });
     </script>
